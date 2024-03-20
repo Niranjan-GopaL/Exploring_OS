@@ -3,23 +3,23 @@
 #include <unistd.h>
 
 int main() {
-    // execl
-    execl("/bin/ls", "ls", "-Rl", NULL);
+    int choice;
+    printf("Enter an integer from 1 to 5: ");
+    scanf("%d", &choice);
 
-    // execlp
-    execlp("ls", "ls", "-Rl", NULL);
+    char *envp[] = {"-a",NULL}; 
+    char *args[] = {"/bin/ls", "-Rl", NULL};
 
-    // execle
-    char *envp[] = {NULL};
-    execle("/bin/ls", "ls", "-Rl", NULL, envp);
+    switch (choice) {
+        case 1: execl("/bin/ls", "ls", "-Rl", NULL); break;
+        case 2: execlp("ls", "ls", "-Rl", NULL); break;
+        case 3: execle("/bin/ls", "ls", "-Rl",NULL, envp); break;
+        case 4: execv(args[0], args); break;
+        case 5: execvp("ls", args); break;
+        default: printf("Invalid input. Please enter an integer from 1 to 5.\n"); break;
+    }
 
-    // execv
-    char *args[] = {"/bin/ls", "ls", "-Rl", NULL};
-    execv(args[0], args);
-
-    // execvp
-    execvp("ls", args);
-
+    
     // If any of the exec calls fail
     perror("exec");
     return 1;

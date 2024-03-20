@@ -37,14 +37,14 @@ void generateFiles() {
         // Close the file
         close(fd);
 
-        sleep(1);  // Sleep for a second
+        // Sleep for a second
+        sleep(1);  
     }
 }
 
 int main() {
 
     while (1) {
-    
         // Generate new files
         generateFiles();
 

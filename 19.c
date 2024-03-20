@@ -21,13 +21,10 @@ void display_process_status() {
 
 int main() {
     pid_t child_pid;
-    
     child_pid = fork();
     
-    if (child_pid < 0) {
-        perror("Forking Failed...\nProgram Terminated...\n");
-        return 1;
-    } else if (child_pid == 0) {
+    if (child_pid < 0) { perror("Forking Failed...\nProgram Terminated...\n"); return 1;} 
+    else if (child_pid == 0) {
         // Child process gets here
         printf("Executing child process...\n");
         display_process_status();

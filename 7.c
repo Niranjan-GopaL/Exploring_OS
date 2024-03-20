@@ -49,16 +49,12 @@ int main(void) {
     // Check if there was an error while reading from the input file
     if (bytes_read == -1) {
         perror("Error reading from input file");
-        close(fd1);
-        close(fd2);
+        close(fd1); close(fd2);
         return 1;
     }
 
     // Close both files
-    close(fd1);
-    close(fd2);
-
+    close(fd1); close(fd2);
     printf("File copied successfully.\n");
-
     return 0;
 }
