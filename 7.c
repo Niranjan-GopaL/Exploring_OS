@@ -12,8 +12,6 @@ file2.txt
 output.txt
 */
 
-
-
 int main(void) {
     char file_name_1[100], file_name_2[100];
     char buffer[BUFFER_SIZE];

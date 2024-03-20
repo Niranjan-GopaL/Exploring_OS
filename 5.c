@@ -15,11 +15,15 @@ const char contents_of_file_i[][80] = {
 
 
 void generateFiles() {
+
     for (int i = 0; i < 5; ++i) {
         char filename[20];
         snprintf(filename, sizeof(filename), "file%d.txt", i);
 
-        // Create a new file
+        // Create a new file 
+        //  if the file does not exist, it should be created. If the file already exists, no effect
+        // the file is opened for writing only. It specifies that the file descriptor will be used for writing data to the file
+        //  it creates a bit mask where both flags are set, indicating that the file should be created if it doesn't exist and opened for writing only
         int fd = open(filename, O_CREAT | O_WRONLY, 0644);
         if (fd == -1) {
             perror("Error creating file");
@@ -38,8 +42,9 @@ void generateFiles() {
 }
 
 int main() {
-    // Run in an infinite loop
+
     while (1) {
+    
         // Generate new files
         generateFiles();
 

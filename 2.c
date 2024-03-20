@@ -1,6 +1,6 @@
 #include <sys/types.h>
 #include <sys/stat.h>
-#include <stdio.h>
+ #include <stdio.h>
 #include <stdlib.h>
 #include <dirent.h>
 #include <string.h>
@@ -16,14 +16,16 @@ void extract_process_info(const char *pid) {
     FILE *fp = fopen(proc_path, "r");
     if (fp != NULL) {
         char line[256];
-        while (fgets(line, sizeof(line), fp)) {
+        while (fgets(line, sizeof(line), fp)) 
             if (strncmp(line, "Name:", 5) == 0 || strncmp(line, "State:", 6) == 0 || strncmp(line, "Pid:", 4) == 0) {
                 printf("%s", line);
-            }
         }
         fclose(fp);
     }
 }
+
+
+
 
 int main() {
     // Fork off the parent process
