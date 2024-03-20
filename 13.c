@@ -29,11 +29,11 @@ int main() {
 
             // Read and process the input
             char buffer[1024];
-            if (fgets(buffer, sizeof(buffer), stdin) != NULL) {
+            if (fgets(buffer, sizeof(buffer), stdin) != NULL) 
                 printf("Input received: %s", buffer);
-            } else {
+            else 
                 printf("Error reading input.\n");
-            }
+            
         } else {
             printf("Unknown file descriptor ready.\n");
         }

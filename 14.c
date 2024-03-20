@@ -9,6 +9,7 @@ typedef struct {
     const char *file_type;
 } MagicNumber;
 
+
 MagicNumber magic_numbers[] = {
     {"\x89\x50\x4E\x47",   "PNG"},      // PNG
     {"\xFF\xD8\xFF",       "JPEG"},     // JPEG
@@ -27,37 +28,28 @@ MagicNumber magic_numbers[] = {
     {NULL,                  "Unknown"}   // Unknown file type
 };
 
+
 char* identifyFileType(FILE *file) {
     unsigned char magic[MAX_MAGIC_SIZE];
     size_t bytes_read = fread(magic, 1, MAX_MAGIC_SIZE, file);
-    if (bytes_read < MAX_MAGIC_SIZE) {
-        return "Unknown";
-    }
+    if (bytes_read < MAX_MAGIC_SIZE)  return "Unknown"; 
 
-    for (int i = 0; magic_numbers[i].magic_number != NULL; i++) {
-        if (memcmp(magic, magic_numbers[i].magic_number, MAX_MAGIC_SIZE) == 0) {
+    for (int i = 0; magic_numbers[i].magic_number != NULL; i++) 
+        if (memcmp(magic, magic_numbers[i].magic_number, MAX_MAGIC_SIZE) == 0) 
             return (char *)magic_numbers[i].file_type;
-        }
-    }
 
     return "Unknown";
 }
 
+
 int main(int argc, char *argv[]) {
-    if (argc != 2) {
-        printf("Usage: %s <filename>\n", argv[0]);
-        return 1;
-    }
+    if (argc != 2) { printf("Usage: %s <filename>\n", argv[0]); return 1; }
 
     FILE *file = fopen(argv[1], "rb");
-    if (file == NULL) {
-        perror("Error opening file");
-        return 1;
-    }
+    if (file == NULL) { perror("Error opening file"); return 1; }
 
     char *file_type = identifyFileType(file);
     printf("File type: %s\n", file_type);
-
     fclose(file);
 
     return 0;

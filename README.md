@@ -64,3 +64,16 @@ exit        : naturally ending by using exit()
 1 to 99, 
 a task with priority 1 would be considered the highest priority, 
 while a task with priority 99 would be the lowest
+
+
+
+### Soft Link
+- a separate fs entry
+- Appears as a separate file with its own inode
+- If the target file is deleted, the soft link becomes a dangling pointer
+- Can link directories
+- Occupies a small amount of disk space (only a few bytes)
+
+### Hard Link
+- points to the inode of target file
+- Contains the same inode number as the target file.
