@@ -1,6 +1,3 @@
-
----
-
 # Ultimate Idea
 - Maybe make THE ULTIMATE SHELL SCRIPT
 - it automatically compiles executable for all 30 files

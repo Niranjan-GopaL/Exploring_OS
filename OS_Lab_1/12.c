@@ -15,10 +15,7 @@ int main() {
     // Open a file in write-only mode
     int fd_write = open("file1.txt", O_WRONLY);
     // printf("%d\n",fd_write);
-    if (fd_write == -1) {
-        perror("Error opening file in write-only mode");
-        exit(EXIT_FAILURE);
-    }
+    if (fd_write == -1) { perror("Error opening file in write-only mode"); exit(EXIT_FAILURE); }
 
     // Open a file in read-write mode
     int fd_read_write = open("file2.txt", O_RDWR);

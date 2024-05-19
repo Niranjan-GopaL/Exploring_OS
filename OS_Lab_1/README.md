@@ -77,3 +77,15 @@ while a task with priority 99 would be the lowest
 ### Hard Link
 - points to the inode of target file
 - Contains the same inode number as the target file.
+
+
+
+
+# dup and dup2
+- new fd is Lowest-numbered descriptor : dup
+- set fd to user define : dup2
+
+
+
+# select
+- perform I/O operations
