@@ -5,16 +5,21 @@
 #include <fcntl.h>
 #include <unistd.h>
 
-int main(int argc, char* argv []){
-    int fd = open("fifo2",O_RDWR|O_CREAT);
-    char msg_write[15] ;
-    char msg_read[15] ;
-    while(1){
-        printf("enter message : ");
-        fgets(msg_write, 15, stdin);
-        write(fd,msg_write,15);
-        int size = read(fd,msg_read,15);
-        printf("%s\n",msg_read);
+#define FIFO_PATH "fifo_question_a"
+#define MSG_SIZE 15
+
+int main() {
+    int fd = open(FIFO_PATH, O_RDONLY);
+    if (fd == -1) { perror("open"); exit(EXIT_FAILURE); }
+
+    char msg_read[MSG_SIZE];
+    while (1) {
+
+        if (read(fd, msg_read, MSG_SIZE) == -1) { perror("read"); close(fd); exit(EXIT_FAILURE); }
+        printf("Received message: %s\n", msg_read);
+
     }
+
+    close(fd);
     return 0;
 }

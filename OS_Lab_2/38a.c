@@ -4,19 +4,26 @@
 #include <sys/stat.h>
 #include <fcntl.h>
 #include <unistd.h>
+#include <string.h>
 
-int main(int argc, char* argv []){
-    int fd = open("fifo2",O_RDWR|O_CREAT);
-    
-    char msg_read[15] ;
-    char msg_write[15];
-    while(1){
-        int size = read(fd,msg_read,15);
-        printf("%s\n",msg_read);
-        printf("enter message : ");
-        fgets(msg_write, 15, stdin);
-        write(fd,msg_write,15);
+#define FIFO_PATH "fifo_question_a"
+#define MSG_SIZE 15
+
+int main() {
+    int fd = open(FIFO_PATH, O_WRONLY);
+    if (fd == -1) { perror("open"); exit(EXIT_FAILURE); }
+
+    char msg_write[MSG_SIZE];
+
+    while (1) {
+        printf("Enter message: ");
+        fgets(msg_write, MSG_SIZE, stdin);
+        // msg_write[strlen(msg_write) - 1] = '\0'; // Remove newline character
+
+        if (write(fd, msg_write, MSG_SIZE) == -1) { perror("write"); close(fd); exit(EXIT_FAILURE); }
+        
     }
+
+    close(fd);
     return 0;
 }
-

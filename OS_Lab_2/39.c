@@ -22,7 +22,7 @@ int main(){
     t.tv_usec = 0;
 
     if(!select(fd+1, &readfds, NULL, NULL, &t)){
-        printf("User didn't enter anything!\n");
+        // printf("User didn't enter anything!\n");
     }
     else{
         fgets(msg, msg_size, stdin);

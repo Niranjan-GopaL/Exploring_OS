@@ -1,6 +1,4 @@
-/*Description:
-program to print a message queue's attributes
-*/
+// Program to print a message queue's attributes
 #include<stdio.h>
 #include<unistd.h>
 #include<sys/msg.h>
