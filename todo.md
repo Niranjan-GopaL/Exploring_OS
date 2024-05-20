@@ -1,3 +1,10 @@
+# Viva Prep
+
+- PIPE : unidirectional communication channel for IPC
+
+
+
+
 
 ---
 

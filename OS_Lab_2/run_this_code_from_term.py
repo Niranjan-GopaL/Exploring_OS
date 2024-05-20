@@ -25,7 +25,3 @@ if __name__ == '__main__':
 	print("Following are the prime numbers smaller"),
 	print("than or equal to", num)
 	SieveOfEratosthenes(num)
- 
- 
- 
- 
