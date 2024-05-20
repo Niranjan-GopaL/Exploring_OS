@@ -14,9 +14,4 @@ all: $(EXECUTABLES)
 
 clean:
 	rm -f $(EXECUTABLES)
-	rm -f file0.txt
-	rm -f file1.txt
-	rm -f file2.txt
-	rm -f file3.txt
-	rm -f file4.txt
-	rm -f a.out
+	rm -f fifo*
