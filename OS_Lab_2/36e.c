@@ -3,5 +3,5 @@
 
 
 int main() {
-    mkfifo("./fifoe", 0744);
+    mkfifo("./fifo_quesiton_e", 0744);
 }

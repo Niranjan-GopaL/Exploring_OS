@@ -1,1 +1,1 @@
-mkfifo -m 0744 fifo_q2
+mkfifo -m 0744 fifo_question_b
