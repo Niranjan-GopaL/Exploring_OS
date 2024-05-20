@@ -1,5 +1,4 @@
 CC = gcc
-CFLAGS = -Wall
 
 # All C files in ./ is in SOURCES
 SOURCES := $(wildcard *.c)

@@ -18,7 +18,4 @@ int main(){
     getchar();
     buf.sem_op = 1 ;
     semop(semid,&buf,1);
-
-
-
 }

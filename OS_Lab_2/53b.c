@@ -1,4 +1,4 @@
-/*Description: set a interval timer in 10sec and
+/* set a interval timer in 10sec and
 10micro second using ITIMER_VIRTUAL
 */
 #include <sys/time.h>
