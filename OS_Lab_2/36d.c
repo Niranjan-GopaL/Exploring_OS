@@ -1,8 +1,9 @@
-/*Description:
-create fifo file by mknod library function
-*/
+#include <sys/types.h>
 #include <sys/stat.h>
+#include <fcntl.h>
+
 
 int main() {
-    mknod("./fifod", S_IFIFO | 0744, 0);
+    mknod("fifo_question_d", S_IFIFO | 0666, 0);
+    return 0;
 }

@@ -1,0 +1,4 @@
+strace -c mknod fifo_q2 p :-  17 total
+strace -c mkfifo fifo_q3  :-  30 total
+
+MKNOD was found to be better ( fewer syscall overhead)

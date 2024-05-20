@@ -1,6 +1,3 @@
-/*Description:
-two programs so that both can communicate by FIFO -Use two way communication.
-*/
 #include <stdio.h>
 #include <stdlib.h>
 #include <sys/types.h>

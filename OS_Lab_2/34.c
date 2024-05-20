@@ -1,49 +1,70 @@
+/*                  EMULATING `ls - ls | wc` ourselves
+
+
+
++-------------------+       pipe       +-------------------+
+|      Parent       |<-----------------|      Child        |
+|     ( reads )     |                  |     ( writes )    |
+|  (executes `wc`)  |                  | (executes `ls -l`)|
++-------------------+                  +-------------------+
+
+
+                            MAIN IDEA
+
+Pipe Setup          :       A pipe is created where fd[0]-> READ fd[1] -> WRITE
+Child Process       :       Executes ls -l and writes its output to fd[1] (stdout).
+Parent Process      :       Reads from fd[0] (stdin) and processes it with wc.
+
+The pipe facilitates communication between the two processes, by 
+allowing the output of ls -l to be directly used as input to wc, 
+similar to how a shell pipeline works.
+
+*/
+
 #include <stdio.h>
+#include <unistd.h>
 #include <stdlib.h>
 #include <unistd.h>
+#include <time.h>
+#include <sys/types.h>
+#include <sys/stat.h>
+#include <string.h>
 #include <sys/wait.h>
 
 
-int main() {
-    int pipefd[2];
-    if (pipe(pipefd) == -1) { perror("pipe"); exit(EXIT_FAILURE); }
+int main(){
+    int fd[2]; pipe(fd);
+    int pid = fork();
 
+    if(pid==0){
+        close(fd[0]); // unneccesary
 
-    pid_t pid = fork();
-    if (pid == -1) { perror("fork"); exit(EXIT_FAILURE); }
-
-
-    // Child process
-    if (pid == 0) { 
-
-        close(pipefd[0]); 
-
-        // Redirect stdout to the writing end of the pipe
-        dup2(pipefd[1], STDOUT_FILENO); 
+        // Close the stdout, fd 1 ; 
+        // we want to redirect the stdout to the write end of the pipe
+        close(1);  
         
-        // Close the original writing end of the pipe
-        close(pipefd[1]); 
 
+        // This duplicates the write end of the pipe (fd[1]) 
+        dup(fd[1]); 
         
-        execlp("ls", "ls", "-l", NULL); perror("execlp");
-        exit(EXIT_FAILURE);
-    } 
-    
-    // Parent process
-    else { 
-        // Close writing end of the pipe
-        close(pipefd[1]); 
 
-        // Redirect stdin to the reading end of the pipe
-        dup2(pipefd[0], STDIN_FILENO); 
-        
-        // Close the original reading end of the pipe
-        close(pipefd[0]); 
-
-        execlp("wc", "wc", NULL);
-        perror("execlp");
-        exit(EXIT_FAILURE);
+        // KEY IDEA :-
+        // THE PROCESS now becomes  "ls -l" :- OUTPUT of that in stdout is WRITTEN TO pipe
+        execlp("ls","ls","-l",(char*)NULL); 
+        close(fd[1]);
+        return 0;
     }
+    else{
+        
+        close(fd[1]);
+        close(0); // close stdin, fd 0
 
-    return 0;
+        // Duplicate the read end of the pipe to stdin (file descriptor 0).
+        dup(fd[0]); 
+        execlp("wc","wc",(char*)NULL);
+        close(fd[0]);
+
+    }
+    return 0 ; 
+    
 }

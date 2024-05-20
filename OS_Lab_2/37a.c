@@ -1,6 +1,3 @@
-/*Description:
-two programs so that both can communicate by FIFO -Use one way communication.
-*/
 #include <stdio.h>
 #include <stdlib.h>
 #include <sys/types.h>
@@ -9,9 +6,12 @@ two programs so that both can communicate by FIFO -Use one way communication.
 #include <unistd.h>
 
 int main(){
-    int fd = open("fifo",O_RDWR|O_CREAT);
-    char mssg[100];
-    read(fd,mssg,100);
-    printf("%s",mssg);
-    
+    // Open FIFO for writing only
+    int fd = open("fifo",O_WRONLY);
+
+    char mssg[20] = "Hello how are you\n";
+
+    // Write message to FIFO
+    write(fd,mssg,20);
+    return 0 ;
 }

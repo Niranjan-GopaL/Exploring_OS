@@ -1,13 +1,11 @@
-/*Description:
-program to wait for data to be written into FIFO within 10 seconds, use select
-system call with FIFO.
-*/
 #include <stdio.h>
 #include <stdlib.h>
 #include <sys/types.h>
 #include <sys/stat.h>
 #include <fcntl.h>
 #include <unistd.h>
+
+
 int main(){
     struct timeval t;
     fd_set readfds;

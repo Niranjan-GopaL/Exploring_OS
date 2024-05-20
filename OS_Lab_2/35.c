@@ -1,18 +1,51 @@
-/*Description:
-program to find out total number of directories on the pwd.
-execute ls -l | grep ^d | wc ? Use only dup2.
+/*
+
+  +-----------------+       +-----------------+       +-----------------+
+  |  First Child    |       |  Second Child   |       |   Parent        |
+  |  Process        |       |  Process        |       |   Process       |
+  |  (executes ls)  |       |  (executes grep)|       |   (executes wc) |
+  +-----------------+       +-----------------+       +-----------------+
+        |                           |                         |
+        v                           v                         v
+  +-------------+           +-------------+           +-------------+
+  |  pipe fd1   |           |  pipe fd2   |           |  pipe fd2   |
+  |  write end  |           |  write end  |           |  read end   |
+  +-------------+           +-------------+           +-------------+
+        |                           |                         |
+        v                           v                         v
+  +-------------+           +-------------+           +-------------+
+  |  pipe fd1   |           |  pipe fd2   |           |  standard   |
+  |  read end   |           |  read end   |           |  input      |
+  +-------------+           +-------------+           +-------------+
+        |                           |                         |
+        v                           v                         v
+  +-------------+           +-------------+           +-------------+
+  |  standard   |           |  standard   |           |  standard   |
+  |  output     |           |  input      |           |  output     |
+  +-------------+           +-------------+           +-------------+
+
+
+KEY POINTS 
+
+- Pipes (fd1 and fd2) facilitate inter-process communication.
+- dup2 is used to redirect standard input and output to the appropriate ends of the pipes.
+- The first child process runs ls -l and writes its output to the pipe.
+- The second child process reads from this pipe, runs grep ^d, and writes its output to another pipe.
+- The parent process reads from the second pipe and runs wc to count the directories.
 */
+
+
 #include <stdio.h>
 #include <unistd.h>
 #include <stdlib.h>
 #include <unistd.h>
-#include <time.h>
-#include <sys/types.h>
-#include <sys/stat.h>
-#include <string.h>
 #include <sys/wait.h>
-#include<fcntl.h>
 
+
+
+
+
+// counting directories
 int main(){
     //ls -l | grep ^d | wc
 
@@ -24,7 +57,7 @@ int main(){
     int pid = fork();
     if(pid==0){
 
-        close(1);
+        close(1); // closing std
         close(fd1[0]);
         dup2(fd1[1],1);
         execl("ls","ls","-l",(char*)NULL); 
@@ -36,6 +69,8 @@ int main(){
             close(fd1[1]);
             close(fd2[0]);
             close(0);
+
+
             dup2(fd1[0],0);
             close(1);
         

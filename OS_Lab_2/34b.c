@@ -1,6 +1,3 @@
-/*Description:
-program to execute ls -l | wc using dup2
-*/
 #include <stdio.h>
 #include <unistd.h>
 #include <stdlib.h>
