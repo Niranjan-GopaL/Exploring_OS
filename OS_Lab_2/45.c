@@ -1,15 +1,10 @@
-/*Description:
-program to receive messages from the message queue with IPC_NOWAIT as a flag
-*/
-
 #include <stdio.h> 
 #include <sys/ipc.h> 
 #include <sys/msg.h> 
 
-int main() 
-{ 
-	key_t key; 
-	int msqid; 
+
+int main()  { 
+	key_t key; int msqid; 
 	key = ftok(".", 'm'); 
 
 	msqid = msgget(key, 0744 | IPC_CREAT); 
@@ -19,7 +14,7 @@ int main()
 
     printf("Current permissions : %d \n", permissions->mode);
 
-//Changing permission 
+        //Changing permission 
     permissions->mode = 777;
     ms_info.msg_perm  = *permissions;
     msgctl(msqid,IPC_SET,&ms_info);

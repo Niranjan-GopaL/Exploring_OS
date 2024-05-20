@@ -1,7 +1,3 @@
-/*Description:
-program to remove the message queue.
-*/
-
 #include<unistd.h>
 #include <stdio.h> 
 #include <sys/ipc.h> 
@@ -18,5 +14,4 @@ int main()
 
 	msgctl(msqid,IPC_RMID,NULL);
     execlp("ipcs","ipcs","-q",NULL);
-    
 } 

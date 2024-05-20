@@ -1,6 +1,3 @@
-/*Description:
-program to create a semaphore and initialize value to the semaphore. create a counting semaphore
-*/
 #include<stdio.h>
 #include<unistd.h>
 #include<sys/sem.h>

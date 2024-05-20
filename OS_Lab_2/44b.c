@@ -1,6 +1,3 @@
-/*Description:
-program to receive messages from the message queue with IPC_NOWAIT as a flag
-*/
 #include<stdio.h>
 #include<unistd.h>
 #include<sys/msg.h>
@@ -13,12 +10,12 @@ struct msgbuf
     char mtext[100];
 }mq;
 
-  /*
-    mtype
-        0 - FIFO
-        +ve = message type
-        -ve = first message or <=  to abs value
-    */
+/*                                          KEY DIfference
+            0 flag will block until a message with the specified type is available.
+            IPC_NO_WAIT flag will not block; it will return immediately if no message is available.
+*/
+
+
 int main(){
     int msgid;
     key_t key;
@@ -28,9 +25,7 @@ int main(){
 
     mq.mtype = 10;
 
-  
-
-    int size = msgrcv(msgid, &mq, sizeof(mq),10,IPC_NOWAIT); 
+    int size = msgrcv(msgid, &mq, sizeof(mq), 10 ,IPC_NOWAIT); 
 
     if(size == -1){
         printf("No message recieved\n");
@@ -40,3 +35,4 @@ int main(){
 
     execlp("ipcs","ipcs","-q",NULL);
     return 0;
+}

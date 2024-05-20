@@ -1,6 +1,4 @@
-/*Description:
-program to send messages to the message queue
-*/
+/* Program to send messages to the message queue */
 
 #include<stdio.h>
 #include<unistd.h>
@@ -9,17 +7,15 @@ program to send messages to the message queue
 #include<sys/types.h>
 
 
-struct msgbuf
-{
+struct msgbuf {
     long int mtype;
     char mtext[100];
-}mq;
+} mq ;
 
 
 int main(){
     
-    int msgid;
-    key_t key;
+    int msgid; key_t key;
 
     key = ftok(".",'m');
     msgid = msgget(key,0); 
