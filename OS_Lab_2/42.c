@@ -5,15 +5,21 @@
 #include<sys/ipc.h>
 #include<sys/types.h>
 
+
 int main(){
     key_t key; 
 	int msgqid; 
 	key = ftok(".", 'm'); 
 
 	msgqid = msgget(key, 0744 | IPC_CREAT); 
+
     struct msqid_ds ms_info;
-	msgctl(msgqid,IPC_STAT,&ms_info);
+
+
+	msgctl(msgqid, IPC_STAT, &ms_info);
     struct ipc_perm permissions = ms_info.msg_perm;
+
+    
     printf("Access permissions = %d\n",permissions.mode);
     printf("Uid = %d ",permissions.uid);
     printf("Gid = %d\n",permissions.gid);

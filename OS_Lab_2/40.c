@@ -13,8 +13,10 @@ size of a pipe (circular buffer).
 int main(){
     int pd[2];
     pipe(pd);
-    int pipe_size = fcntl(pd[0],F_GETPIPE_SZ);
-    printf("pipe size = %d\n",pipe_size);
-    printf("max numbers of open fds = %d\n",FOPEN_MAX);
+    int pipe_size = fcntl(pd[0], F_GETPIPE_SZ);
+
+    printf("pipe size = %d\n", pipe_size);
+    printf("max numbers of open fds = %d\n", FOPEN_MAX);
+    
     return 0;
 }
