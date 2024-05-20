@@ -3,15 +3,15 @@
 
 int main(){
 
-    // create pipe
+    // 0 -> read  ; 1 -> write
     int fd[2];
     pipe(fd);
 
-    // write to pipe
+    // write to write-end of pipe
     write(fd[1],"Hello World\n",13);
     char ans[13]; 
 
-    // read from pipe
+    // read from read-end of pipe
     read(fd[0],ans,13);
     
     write(1,ans,13);

@@ -1,25 +1,23 @@
-/*Description:
-program to send some data from parent to the child process
-*/
 #include<stdio.h>
 #include <unistd.h>
 
 int main(){
-    int fd[2];
-    pipe(fd);
+    int fd[2]; pipe(fd);
     int id = fork();
+
+    // CHILD proc
     if(id==0){
-        
-        close(fd[1]);
+        close(fd[1]); 
         char buff[13];
-        read(fd[0],buff,13);
+        read(fd[0],buff,13); 
         printf("%s",buff);
 
     }
+    // PARENT proc
     else{
         close(fd[0]);
         write(fd[1],"Hello World\n",13);
-
     }
+    
     return 0 ;
 }
