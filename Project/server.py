@@ -1,3 +1,6 @@
+#! /bin/python3
+
+
 """
 This is the server-side file for the Online Library Management System (OLMS).
 
@@ -13,15 +16,18 @@ For admins, the following functionalities are provided:
 
 The server communicates with multiple clients using socket programming, ensuring concurrent access to the library database stored in CSV format. Data consistency is maintained through file-locking mechanisms.
 """
+
 import socket
 import threading
 import csv
 from datetime import datetime
 
+
+
 # Server configuration
 SERVER_HOST = socket.gethostname()  # Get the hostname dynamically
 SERVER_PORT = 5050
-BUFFER_SIZE = 2048
+BUFFER_SIZE = 204800
 ADMIN_PASS = "ad123"
 
 def start_server():
@@ -46,8 +52,9 @@ def authenticate(client_socket):
         for row in reader:
             if str(row['username']) == username and str(row['password']) == password:
                 return True, username
-
     return False, None
+
+
 
 def borrowedBooks(client_socket, userid):
     book_id = None
@@ -71,6 +78,7 @@ def borrowedBooks(client_socket, userid):
                 break
 
     client_socket.sendall(borrowed_book_details.encode())
+
 
 def borrowBook(client_socket, user_id, book_id):
     book_found = False
@@ -143,7 +151,7 @@ def searchBook(client_socket, search_parameter):
             if (search_parameter.lower() in book['book_id'].lower() or
                 search_parameter.lower() in book['title'].lower() or
                 search_parameter.lower() in book['author'].lower() or
-                search_parameter.lower() in book['genre'].lower()):
+                search_parameter.lower() in book['genre'].lower() ):
                 book_details = f"Book ID: {book['book_id']}, Title: {book['title']}, Author: {book['author']}, Genre: {book['genre']}, Year: {book['year']}, Availability: {book['availability']}"
                 results.append(book_details)
 
@@ -198,24 +206,55 @@ def modifyBook(client_socket, book_details):
 
     client_socket.sendall("Book details updated successfully.".encode())
 
-def menuHandler(client_socket):
-    while True:
-        request = client_socket.recv(BUFFER_SIZE).decode().split("@")
-        
-        if request[0] == "borrowedbooks":
-            borrowedBooks(client_socket, request[1])
-        elif request[0] == "borrowbook":
-            borrowBook(client_socket, request[1], request[2])
-        elif request[0] == "searchbook":
-            searchBook(client_socket, request[1])
-        elif request[0] == "viewstudentdetails":
-            viewStudentDetails(client_socket, request[1])
-        elif request[0] == "admin":
-            isAdmin(client_socket, request[1])
-        elif request[0] == "modifybook":
-            modifyBook(client_socket, "@".join(request[1:]))
+def add_book(client_socket, book_details):
+    try:
+        # Split the book details
+        book_id, title, author, genre, year, availability = book_details.split("@")
 
+        # Read the current books from the CSV file
+        books = read_csv('books.csv')
 
+        # Check if the book ID already exists
+        for book in books:
+            if book['book_id'] == book_id:
+                client_socket.sendall("Book ID already exists.".encode())
+                return
+
+        # Add the new book to the list
+        new_book = {
+            'book_id': book_id,
+            'title': title,
+            'author': author,
+            'genre': genre,
+            'year': year,
+            'availability': availability
+        }
+        books.append(new_book)
+
+        # Write the updated book list back to the CSV file
+        write_csv('books.csv', books, ['book_id', 'title', 'author', 'genre', 'year', 'availability'])
+
+        client_socket.sendall("Book added successfully.".encode())
+    except Exception as e:
+        logging.error(f"Error adding book: {e}")
+        client_socket.sendall("Error adding book.".encode())
+
+def read_csv(file_name):
+    try:
+        with open(file_name, 'r') as file:
+            return list(csv.DictReader(file))
+    except Exception as e:
+        logging.error(f"Error reading {file_name}: {e}")
+        return []
+
+def write_csv(file_name, data, fieldnames):
+    try:
+        with open(file_name, 'w', newline='') as file:
+            writer = csv.DictWriter(file, fieldnames=fieldnames)
+            writer.writeheader()
+            writer.writerows(data)
+    except Exception as e:
+        logging.error(f"Error writing to {file_name}: {e}")
 
 def deleteBook(client_socket, book_id):
     try:
@@ -248,6 +287,7 @@ def deleteBook(client_socket, book_id):
         client_socket.sendall("Error deleting book.".encode())
 
 def isAdmin(client_socket, admin_pass):
+    # print(admin_pass)
     if admin_pass == ADMIN_PASS:
         # print("true")
         client_socket.sendall("True".encode())
@@ -292,6 +332,31 @@ def handle_client(client_socket, client_address):
             if csvfile.tell() == 0:
                 writer.writerow(["IP Address", "Port", "Status", "Timestamp"])
             writer.writerow([client_address[0], client_address[1], "Closed", datetime.now()])
+
+
+# Main function that handles all the requests from server
+def menuHandler(client_socket):
+    while True:
+        request = client_socket.recv(BUFFER_SIZE).decode().split("@")
+        
+        if request[0] == "borrowedbooks":
+            borrowedBooks(client_socket, request[1])
+        elif request[0] == "borrowbook":
+            borrowBook(client_socket, request[1], request[2])
+        elif request[0] == "searchbook":
+            searchBook(client_socket, request[1])
+        elif request[0] == "viewstudentdetails":
+            viewStudentDetails(client_socket, request[1])
+        elif request[0] == "admin":
+            isAdmin(client_socket, request[1])
+        elif request[0] == "modifybook":
+            modifyBook(client_socket, "@".join(request[1:]))
+        elif request[0] == "addbook":
+            add_book(client_socket, "@".join(request[1:]))
+        elif request[0] == "deletebook":
+            deleteBook(client_socket, request[1])  # Pass the book ID for deletion
+        else:
+            client_socket.sendall("Invalid command.".encode())
 
 if __name__ == "__main__":
     start_server()

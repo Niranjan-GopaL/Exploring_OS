@@ -1,9 +1,11 @@
+#! /bin/python3
+
 import socket
 
 # Server configuration
 SERVER_HOST = socket.gethostname()  # Get the hostname dynamically
 SERVER_PORT = 5050
-BUFFER_SIZE = 2048
+BUFFER_SIZE = 204800
 
 def start_client(client_socket):
     print("\n\n......................Welcome to OLMS.......................\n\n")
@@ -86,11 +88,15 @@ def clientMenu(client_socket, userid):
 
         elif choice == 3:
             input_admin_pass = input("Enter admin password: ")
+            print(input_admin_pass)
             msg = f"admin@{input_admin_pass}"
             client_socket.sendall(msg.encode())
             is_admin = client_socket.recv(BUFFER_SIZE).decode()
             if is_admin=="True":
                 is_admin=True
+            else:
+                is_admin = False
+
             if is_admin:
                 while True:
                     print("\n\n1.View Student Details")
@@ -115,8 +121,8 @@ def clientMenu(client_socket, userid):
                         modifyBook(client_socket)
                     
                     elif admin_choice == 3:
-                        addBook(client_socket)
-
+                        add_book(client_socket)
+                        
                     elif admin_choice == 4:
                         book_id_to_delete = input("Enter the Book ID to delete: ")
                         msg = f"deletebook@{book_id_to_delete}"
@@ -166,6 +172,22 @@ def modifyBook(client_socket):
     client_socket.sendall(msg.encode())
     response = client_socket.recv(BUFFER_SIZE).decode()
     print(response)
+
+def add_book(client_socket):
+    print("Enter the following details to add a new book:")
+    book_id = input("Book ID: ").strip()
+    title = input("Title: ").strip()
+    author = input("Author: ").strip()
+    genre = input("Genre: ").strip()
+    year = input("Year: ").strip()
+    availability = input("Availability (Yes/No): ").strip()
+
+    book_details = f"{book_id}@{title}@{author}@{genre}@{year}@{availability}"
+    msg = f"addbook@{book_details}"
+    client_socket.sendall(msg.encode())
+    response = client_socket.recv(BUFFER_SIZE).decode()
+    print(response)
+
 
 
 client_socket = socket.socket(socket.AF_INET, socket.SOCK_STREAM)

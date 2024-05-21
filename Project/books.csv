@@ -1,6 +1,6 @@
 book_id,title,author,genre,year,availability
 1,The Great Gatsby,F. Scott Fitzgerald,Fiction,1925,No
-2,To Kill a Mockingbird,Harper Lee,Fiction,1960,No
+2,I changed the title to be FUCK MY LIFE (FML),To Kill a Mockingbird,Fiction,1960,No
 3,1984,George Orwell,Dystopian,1949,No
 4,Pride and Prejudice,Jane Austen,Romance,1813,Yes
 5,The Catcher in the Rye,J.D. Salinger,Fiction,1951,Yes
@@ -8,7 +8,7 @@ book_id,title,author,genre,year,availability
 7,The Hobbit,J.R.R. Tolkien,Fantasy,1937,Yes
 8,War and Peace,Leo Tolstoy,Historical,1869,Yes
 9,The Odyssey,Homer,Classical,8th Century BC,Yes
-10,Crime and Punishment,Fyodor Dostoevsky,Crime,1866,Yes
+10,Crime and Punishment,Fyodor Dostoevsky,Crime,10,Yes
 11,The Adventures of Huckleberry Finn,Mark Twain,Adventure,1884,Yes
 12,Brave New World,Aldous Huxley,Dystopian,1932,Yes
 13,Wuthering Heights,Emily Brontë,Romance,1200,Yes
@@ -76,7 +76,7 @@ book_id,title,author,genre,year,availability
 75,The Road,Cormac McCarthy,Post-Apocalyptic,2006,Yes
 76,Blood Meridian,Cormac McCarthy,Western,1985,Yes
 77,No Country for Old Men,Cormac McCarthy,Thriller,2005,Yes
-78,The Stand,Stephen King,Horror,1978,Yes
+78,The Stand,Stephen King,Horror,1978,No
 79,It,Stephen King,Horror,1986,Yes
 80,The Shining,Stephen King,Horror,1977,Yes
 81,Dracula,Bram Stoker,Horror,1897,Yes
@@ -98,4 +98,4 @@ book_id,title,author,genre,year,availability
 97,Red Dragon,Thomas Harris,Thriller,1981,Yes
 98,Hannibal,Thomas Harris,Thriller,1999,Yes
 99,American Gods,Neil Gaiman,Fantasy,2001,Yes
-100,Good Omens,Neil Gaiman and Terry Pratchett,Fantasy,1990,Yes
+100,Good Omens,Neil Gaiman and Terry Pratchett,Fantasy,1990,No
