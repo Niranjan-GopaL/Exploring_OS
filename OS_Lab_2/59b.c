@@ -1,20 +1,21 @@
-/*Description:using signal system call to catch the signals.
-*/
+#include <stdio.h>
+#include <stdlib.h>
 #include <signal.h>
-#include<stdio.h>
-#include<stdlib.h>
 
-void handler(int signum){
-	if(signum == SIGINT){
-		printf("CAPTURED SIGNAL"); 
-		
-	}
+void my_sig_handler(int sig)
+{
+    printf("Received SIGINT signal: %d\n", sig);
+    printf("Exiting....\n");
+    exit(EXIT_SUCCESS);
 }
+/*The SIGINT signal is sent to a process by its 
+controlling terminal when a user wishes to interrupt the process.
+This is typically initiated by pressing Ctrl + C */
 
 int main()
 {
-	if(signal(SIGINT,handler)==SIG_ERR){
-		printf("cant catch");}
-	sleep(5);
-  	return 0;	
+    signal(SIGINT, my_sig_handler);
+    printf("Catching SIGINT\n");
+    while(1) {} // Infinite loop to keep the program running so that we can easily issue a signal to this process
+    return 0;
 }

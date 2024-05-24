@@ -1,27 +1,27 @@
-/*Description:program using sigaction system call to catch the signals
-*/
-#include<stdio.h>
-#include<signal.h>
-#include<unistd.h>
-#include<stdlib.h>
+#include <unistd.h>
+#include <stdio.h>
+#include <stdlib.h>
+#include <signal.h>
 
-void sig_handler(int signo)
+void my_sig_handler(int sig)
 {
-    if (signo == SIGFPE){
-        printf("CAPTURED SIGFPE\n");
-        exit(0);
-    }
+    printf("Received SIGFPE signal: %d\n", sig);
+    printf("Exiting....\n");
+    exit(0);
 }
 
-int main(void)
+/*The SIGFPE signal reports a fatal arithmetic error. */
+
+int main()
 {
-    struct sigaction act;
-    act.sa_handler = &sig_handler;
-    if (sigaction(SIGFPE, &act, NULL) < 0) { // SIGFPE : Floating point exception.
-		perror ("floating point error");
-		return 1;
-	}
-    float n = 1/0;
-    printf("no SIGFPE received\n");
+    signal(SIGFPE, my_sig_handler);
+    struct sigaction siga;
+    siga.sa_handler = my_sig_handler;
+    siga.sa_flags = SA_RESTART; //To avoid setting the dafault action
+    sigaction(SIGFPE, &siga, NULL);
+    printf("Catching SIGFPE\n");
+    int b = 1;
+    int a = 2 / (b - 1);
+    printf("No SIGFPE signal received\n");
     return 0;
 }

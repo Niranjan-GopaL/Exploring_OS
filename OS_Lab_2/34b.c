@@ -15,6 +15,7 @@ int main(){
     if(pid==0){
         close(fd[0]);
         close(1);
+        // fd[1] will be 1bb   
         dup2(fd[1],1);
         execlp("ls","ls","-l",(char*)NULL);
         close(fd[1]);

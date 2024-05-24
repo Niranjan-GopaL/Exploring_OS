@@ -1,33 +1,34 @@
-/*Description:using signal system call to catch the signals.
-*/
-
-#include<stdio.h>
-#include<signal.h>
-#include<unistd.h>
-#include<stdlib.h>
+#include <unistd.h>
+#include <stdio.h>
+#include <stdlib.h>
+#include <signal.h>
 #include <sys/time.h>
 
-void sig_handler(int signo)
-{
-    if (signo == SIGALRM){
-        printf("CAPTURED SIGALRM\n");
-        exit(0);
-    }
+void my_sig_handler(int sig) {
+    printf("Inside handler: %d\n", sig);
+    printf("2 seconds over..\n");
 }
 
-int main(void)
-{
-    if (signal(SIGALRM, sig_handler) == SIG_ERR)
-    printf("\ncan't catch SIGALRM\n");
-    struct itimerval timer;
-    timer.it_value.tv_sec = 2;
-    timer.it_value.tv_usec = 0;
+int main() {
+    struct itimerval it_val;
+    signal(SIGALRM, my_sig_handler);
 
-    timer.it_interval.tv_sec = 1;
-    timer.it_interval.tv_usec = 0;
+    // Initialize it_interval.tv_usec
+    it_val.it_value.tv_sec = 4;
+    it_val.it_value.tv_usec = 3;
+    it_val.it_interval.tv_sec = 2;
+    it_val.it_interval.tv_usec = 1; 
 
-    setitimer (ITIMER_REAL, &timer, NULL);
-    sleep(5);
-    printf("no SIGALRM received\n");
+    int ret = setitimer(ITIMER_REAL, &it_val, NULL);
+    if (ret == -1) {
+        perror("Error calling setitimer()\n");
+        exit(EXIT_FAILURE);
+    }
+
+    for (int i = 1; i <= 5; i++) {
+        printf("Main %d\n", i);
+        sleep(1);
+    }
+
     return 0;
 }

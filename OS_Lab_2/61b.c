@@ -1,27 +1,28 @@
-/*Description:program using sigaction system call to catch the signals
-*/
-#include<stdio.h>
-#include<signal.h>
-#include<unistd.h>
-#include<stdlib.h>
+#include <unistd.h>
+#include <stdio.h>
+#include <stdlib.h>
+#include <signal.h>
 
-void sig_handler(int signo)
+void my_sig_handler(int sig)
 {
-    if (signo == SIGINT){
-        printf("\nCAPTURED SIGINT\n");
-        exit(0);
-    }
+    printf("Received SIGINT signal: %d\n", sig);
+    printf("Exiting....\n");
+    exit(0);
 }
 
-int main(void)
+/*The SIGINT signal is sent to a process by its 
+controlling terminal when a user wishes to interrupt the process.
+This is typically initiated by pressing Ctrl + C */
+
+int main()
 {
-    struct sigaction act;
-    act.sa_handler = &sig_handler;
-    if (sigaction(SIGINT, &act, NULL) < 0) { // SIGINT : Interrupt from keyboard
-		perror ("error occured");
-		return 1;
-	}
+    struct sigaction siga;
+    siga.sa_handler = my_sig_handler;
+    siga.sa_flags = SA_RESTART; //To avoid setting the dafault action
+    sigaction(SIGINT, &siga, NULL);
+    printf("Catching SIGINT\n");
+    // A long wait so that we can easily issue a signal to this process
     sleep(5);
-    printf("no SIGINT received\n");
+    printf("No SIGINT signal received\n");
     return 0;
 }

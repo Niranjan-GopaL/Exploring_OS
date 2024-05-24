@@ -1,28 +1,28 @@
-/*Description:program using sigaction system call to catch the signals
-*/
-#include<stdio.h>
-#include<signal.h>
-#include<unistd.h>
-#include<stdlib.h>
+#include <unistd.h>
+#include <stdio.h>
+#include <stdlib.h>
+#include <signal.h>
 
-void sig_handler(int signo)
+void my_sig_handler(int sig)
 {
-    if (signo == SIGSEGV){
-        printf("CAPTURED SIGSEGV\n");
-        exit(0);
-    }
+    printf("Received SIGSEGV signal: %d\n", sig);
+    printf("Exiting....\n");
+    exit(0);
 }
+/*SIGSEGV is caused
+by an invalid memory reference or segmentation fault. */
 
-int main(void)
+int main()
 {
-    struct sigaction act;
-    act.sa_handler = &sig_handler;
-    if (sigaction(SIGSEGV, &act, NULL) < 0) { //SIGSEGV invalid memory reference
-		perror ("invalid memory");
-		return 1;
-	}
-    int* p = NULL;
-    printf("%d\n",*p);
-    printf("no SIGSEGV received\n");
+    struct sigaction siga;
+    siga.sa_handler = my_sig_handler;
+    siga.sa_flags = SA_RESTART; //To avoid setting the dafault action
+    sigaction(SIGSEGV, &siga, NULL);
+    printf("Catching SIGSEGV\n");
+    int *p1 = NULL;
+    int *p2 = malloc(sizeof(int));
+    int k = *p1; //change to p2 for valid memory assignment
+    printf("%d\n", k);
+    printf("No SIGSEGV signal received\n");
     return 0;
 }

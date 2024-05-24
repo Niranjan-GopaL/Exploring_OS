@@ -1,6 +1,3 @@
-/*Description:
-program to implement semaphore to protect any critical section.
-*/
 #include <sys/sem.h>
 
 union semum {

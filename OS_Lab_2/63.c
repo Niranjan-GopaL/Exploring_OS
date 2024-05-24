@@ -1,26 +1,27 @@
-/*Description:program to create an orphan process. Use kill system call to send SIGKILL signal to
-the parent process from the child process.
-*/
-#include<stdio.h>
-#include<signal.h>
-#include<unistd.h>
-void sig_handler(int signo)
-{
-    if (signo == SIGKILL){
-        printf("CAPTURED SIGKILL\n");
-    }
-}
+#include <unistd.h>
+#include <stdio.h>
+#include <stdlib.h>
+#include <signal.h>
+#include <errno.h>
+#include <sys/wait.h>
 
-int main(){
-    if(!fork()){
-        printf("in child process...sending kill signal \n"); 
-        kill(getppid(),SIGKILL);  // Sending kill signal to Parent. //orphan 
-    }
-    else{
-        sleep(5);
-        printf("in parent process\n");
-        if (signal(SIGKILL, sig_handler) == SIG_ERR)
-            printf("can't catch SIGKILL\n");
+int main() {
+    int ret = fork();
+    if (ret == 0) {
+        printf("In child process...sending kill signal\n");
+        int ppid = getppid();
+        int pid = getpid();
+        if (!kill(ppid, SIGKILL))
+            printf("SIGKILL sent to parent process with pid %d from the child process with pid: %d\n", ppid, pid);
+        else if (errno == EPERM)
+            printf("Operation not permitted\n");
+        else
+            printf("%d doesn't exist\n", ppid);
+        sleep(1);
+        printf("Orphan process\n");
+    } else {
+        wait(0);
+        printf("Back In parent process\n");
     }
     return 0;
 }

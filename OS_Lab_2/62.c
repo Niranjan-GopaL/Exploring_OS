@@ -1,26 +1,28 @@
-/*Description:program to ignore a SIGINT signal then reset the default action of the SIGINT signal -
-use sigaction system call
-*/
-#include<stdio.h>
-#include<signal.h>
-#include<unistd.h>
+#include <unistd.h>
+#include <stdio.h>
+#include <stdlib.h>
+#include <signal.h>
 
-void sig_handler(int signo)
-{
-    if (signo == SIGINT){
-        signal(SIGINT, SIG_DFL);
-        printf("\nCAPTURED SIGINT and set to default\n");
-    }
-}
+/*The SIGINT signal is sent to a process by its 
+controlling terminal when a user wishes to interrupt the process.
+This is typically initiated by pressing Ctrl + C */
 
-int main(void)
+int main()
 {
-    struct sigaction act;
-    act.sa_handler = &sig_handler;
-    if (sigaction(SIGINT, &act, NULL) < 0) {
-        perror ("Something went wrong");
-        return 1;
-    }
-    while(1);
+    struct sigaction siga;
+    siga.sa_handler = SIG_IGN;
+    sigaction(SIGINT, &siga, NULL);
+    printf("Ignoring SIGINT\n");
+    // A long wait so that we can easily issue a signal to this process
+    sleep(5);
+    printf("No SIGINT signal received\n");
+
+    //Resetting default action
+    siga.sa_handler = SIG_DFL;
+    sigaction(SIGINT, &siga, NULL);
+    printf("Waiting for SIGINT\n");
+
+    sleep(3);
+    printf("No SIGINT signal received\n");
     return 0;
 }

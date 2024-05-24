@@ -1,11 +1,8 @@
-/* Program to send messages to the message queue */
-
 #include<stdio.h>
 #include<unistd.h>
 #include<sys/msg.h>
 #include<sys/ipc.h>
 #include<sys/types.h>
-
 
 struct msgbuf {
     long int mtype;
