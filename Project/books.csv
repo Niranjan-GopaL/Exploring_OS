@@ -20,8 +20,8 @@ book_id,title,author,genre,year,availability
 19,The Brothers Karamazov,Fyodor Dostoevsky,Philosophical,1880,Yes
 20,Les Misérables,Victor Hugo,Historical,1862,Yes
 21,Madame Bovary,Gustave Flaubert,Fiction,1856,Yes
-22,The Scarlet Letter,Nathaniel Hawthorne,Historical,1850,Yes
-23,Anna Karenina,Leo Tolstoy,Romance,1878,Yes
+22,The Scarlet Letter,Nathaniel Hawthorne,Historical,1850,Yes   
+23,Anna Karenina,Niranjan Gopal,Romance,1878,No
 24,Don Quixote,Miguel de Cervantes,Adventure,1615,Yes
 25,The Count of Monte Cristo,Alexandre Dumas,Adventure,1844,Yes
 26,One Hundred Years of Solitude,Gabriel García Márquez,Magical Realism,1967,Yes

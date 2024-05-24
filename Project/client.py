@@ -4,7 +4,7 @@ import socket
 
 # Server configuration
 SERVER_HOST = socket.gethostname()  # Get the hostname dynamically
-SERVER_PORT = 5050
+SERVER_PORT = 2022
 BUFFER_SIZE = 204800
 
 def start_client(client_socket):
